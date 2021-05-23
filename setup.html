@@ -35,46 +35,45 @@
   <div class="container">
     <div class="row">
       <div class="twelve columns" style="margin-top: 25%">
-        <h4>In-Between on the Go</h4>
-        <br>
+        <h4><a href="index.html">In-Between on the Go</a></h4>
         <h5>Setup</h5>
-        <h6>Dealing</h6>
-        <p>
-          Once the game begins, each player is designated a name (Player 1, 
-          Player 2, etc.…) and the dealer order is established (Player 1 
-          deals the first hand, Player 2 deals the second, and so on and so forth). 
-          The dealer taps on the deck to deal, and one chip from each player is 
-          added to the pot as their ante. The dealer shows the device to each 
-          player starting with the player on their left and ending on themselves. 
-          Each player taps on the Deal Card button to draw their first card and 
-          the process repeats until everyone has drawn a second card. 
-        </p>
-        <br>
-        <h6>Playing the Hand</h6>
-        <p>
-          The dealer shows each player the cards they have drawn again and this time 
-          the player may place a bet from one chip to their remaining chips. 
-          <em>Players may bet the entire pot even if they don't have enough chips to cover, 
-          but if they lose they will be on the hook for any debts they incur...please 
-          bet responsibly.</em> After betting, the third card is dealt to determine if 
-          the player has won or lost. 
-        </p>
-        <h6>Winning and Losing</h6>
-        <p>
-          If the card value is between the player’s two cards, the player wins and 
-          recoups their bet plus an equal amount from the pot. If the third card is 
-          outside the values of the player’s cards or is of the same value as either of 
-          them, the player loses their bet which is added to the pot. If the player’s 
-          two cards are of consecutive values, the player automatically loses, and no 
-          third card is dealt. If the player’s two cards are the same, the player wins 
-          two chips and, again, no third card is dealt. 
-
-          The game ends when the end game condition is met. When the game ends, the 
-          winner(s) and losers are listed with their remaining chips and winnings.
-        </p>
+        <form name="setup">
+          <label for="player_count">Number of Players</label>
+          <select name="player_count"> 
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+          <label for="chip_count">Player Chip Count</label>
+          <input type="number" name="player_chip_count" id="chip_count" placeholder="20">
+          <label for="chip_value">Chip Value</label>
+          $ <input type="number" name="chip_value" id="chip_count" placeholder="0.50">
+          <label for="buy_in">Player Buy-in</label>
+          $ <input type="number" name="buy_in" id="buy_in" placeholder="10.00" disabled>
+          <label for="play_style">Play Style</label>
+          <!-- skeleton CSS calls for wrapping radio/checkboxes in label tags -->
+          <label for="one_winner"><span class="label-body">
+            <input type="radio" name="play_style" id="one_winner" value="one_"> Winner Takes All</span></label>
+          <label for="consensus"><span class="label-body">
+            <input type="radio" name="play_style" id="consensus"> Consensus All</span></label>
+          <label for="hand_limit"><span class="label-body">
+            <input type="radio" name="play_style" id="hand_limit"> Limit Hands</span></label>
+          <input name="hand_count" type="number" id="hand_count" placeholder="10" hidden>
+          <input type="reset">
+          <input type="submit" class="button-primary" value="Submit">
+        </form>
       </div>
     </div>
     <footer>
+      <!-- Required for icon attribution -->
       <div class="twelve columns">Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     </footer>
   </div>
