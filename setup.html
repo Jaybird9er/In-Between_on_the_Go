@@ -16,7 +16,7 @@
 
   <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -27,6 +27,10 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
 
+  <!-- JavaScript
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="setup.js" async></script>
+
 </head>
 <body>
 
@@ -36,7 +40,7 @@
     <div class="row">
       <div class="twelve columns" style="margin-top: 25%">
         <h4><a href="index.html">In-Between on the Go</a></h4>
-        <h5>Setup</h5>
+        <h5>Game Setup</h5>
         <form name="setup">
           <label for="player_count">Number of Players</label>
           <select name="player_count"> 
@@ -68,7 +72,7 @@
             <input type="radio" name="play_style" id="hand_limit"> Limit Hands</span></label>
           <input name="hand_count" type="number" id="hand_count" placeholder="10" hidden>
           <input type="reset">
-          <input type="submit" class="button-primary" value="Submit">
+          <input type="submit" id="submit" class="button-primary" value="Submit">
         </form>
       </div>
     </div>
