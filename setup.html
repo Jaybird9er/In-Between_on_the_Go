@@ -2,6 +2,16 @@
 <html lang="en">
 <head>
 
+  <!-- 
+  Description:
+  - setup.html establishes the game settings
+  - the values are used on the game and endgame pages
+  
+  Author: Jamey Kirk
+  Date: 05.20.2021
+
+  -->
+
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
@@ -57,19 +67,19 @@
             <option value="12">12</option>
           </select>
           <label for="chip_count">Player Chip Count</label>
-          <input type="number" name="player_chip_count" id="chip_count" placeholder="20">
+          <input type="number" name="player_chip_count" id="chip_count" min="2" placeholder="20">
           <label for="chip_value">Chip Value</label>
-          $ <input type="number" name="chip_value" id="chip_count" placeholder="0.50">
+          $ <input type="text" name="chip_value" id="chip_count" placeholder="0.50">
           <label for="buy_in">Player Buy-in</label>
           $ <input type="number" name="buy_in" id="buy_in" placeholder="10.00" disabled>
           <label for="play_style">Play Style</label>
           <!-- skeleton CSS calls for wrapping radio/checkboxes in label tags -->
           <label for="one_winner"><span class="label-body">
-            <input type="radio" name="play_style" id="one_winner" value="one_"> Winner Takes All</span></label>
+            <input type="radio" name="play_style" id="one_winner" value="one_winner" checked> Winner Takes All</span></label>
           <label for="consensus"><span class="label-body">
-            <input type="radio" name="play_style" id="consensus"> Consensus All</span></label>
+            <input type="radio" name="play_style" id="consensus" value="consensus"> Consensus End</span></label>
           <label for="hand_limit"><span class="label-body">
-            <input type="radio" name="play_style" id="hand_limit"> Limit Hands</span></label>
+            <input type="radio" name="play_style" id="hand_limit" value="hand_limit"> Limit Hands</span></label>
           <input name="hand_count" type="number" id="hand_count" placeholder="10" hidden>
           <input type="reset">
           <input type="submit" id="submit" class="button-primary" value="Submit">
