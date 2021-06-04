@@ -11,19 +11,25 @@ Date: 05.20.2021
 
 
 /* Global Variables */
-var playerCount = document.forms.setup.player_count.value;
-var chipCount = document.forms.setup.chip_count.value;
-var chipValue = document.forms.setup.chip_value.value;
-chipValue = parseFloat(chipValue);
-var buyIn = document.forms.setup.buy_in.value;
-var playStyle = document.querySelector("form[name='setup'] input[name='play_style']:checked").value;
+var setupForm = document.forms.setup;
+var playerCount = setupForm.player_count;
+var chipCount = setupForm.player_chip_count;
+var chipValue = setupForm.chip_value;
 
-var submitBtn = document.forms.setup.elements.submit;
+var buyIn = setupForm.buy_in.value;
+var playStyle = setupForm.querySelector("input[name='play_style']:checked").value;
+
+var submitBtn = setupForm.elements.submit;
 
 
 /* Event Listeners */
 window.addEventListener("load", function() {
 
+    
+
+    //setupForm.buy_in.value = 55.00;
+    chipCount.onchange = update;
+    playerCount.onchange = update;
     // calculate Player Buy-in
     if (chipCount > 0)
         buyIn = buyInCalc;
@@ -39,6 +45,14 @@ window.addEventListener("load", function() {
 
     
 });
+
+function update() {
+    console.log(toString(chipCount.value));
+    console.log(playerCount.value);
+    // var floatVal = parseFloat(chipValue);
+    // setupForm.buy_in.value = floatVal;
+}
+
 
 function buyInCalc () {
     return chipCount * chipValue;
