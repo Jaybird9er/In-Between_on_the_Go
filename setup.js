@@ -30,6 +30,7 @@ window.addEventListener("load", function() {
     //setupForm.buy_in.value = 55.00;
     chipCount.onchange = update;
     playerCount.onchange = update;
+    chipValue.onchange = update;
     // calculate Player Buy-in
     if (chipCount > 0)
         buyIn = buyInCalc;
@@ -47,10 +48,12 @@ window.addEventListener("load", function() {
 });
 
 function update() {
-    console.log(toString(chipCount.value));
-    console.log(playerCount.value);
-    // var floatVal = parseFloat(chipValue);
-    // setupForm.buy_in.value = floatVal;
+    chipCount = parseInt(chipCount.value)
+    console.log(typeof(chipCount));
+    chipValue = parseFloat(chipValue.value);
+    console.log(typeof(chipValue));
+    playerCount = parseInt(playerCount.value)
+    console.log(typeof(playerCount));
 }
 
 
