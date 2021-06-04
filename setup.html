@@ -67,11 +67,13 @@
             <option value="12">12</option>
           </select>
           <label for="chip_count">Player Chip Count</label>
-          <input type="number" name="player_chip_count" id="chip_count" min="2" placeholder="20">
+          <input type="number" name="player_chip_count" id="chip_count" min="2" placeholder="20" required>
           <label for="chip_value">Chip Value</label>
-          $ <input type="text" name="chip_value" id="chip_count" placeholder="0.50">
+          $ <input type="text" name="chip_value" id="chip_count" placeholder="0.50" required>
           <label for="buy_in">Player Buy-in</label>
           $ <input type="number" name="buy_in" id="buy_in" placeholder="10.00" disabled>
+          <label for="game_purse">Game Purse</label>
+          $ <input type="number" name="game_purse" id="game_purse" placeholder="20.00" disabled>
           <label for="play_style">Play Style</label>
           <!-- skeleton CSS calls for wrapping radio/checkboxes in label tags -->
           <label for="one_winner"><span class="label-body">

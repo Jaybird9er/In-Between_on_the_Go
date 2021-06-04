@@ -16,8 +16,9 @@ var playerCount = setupForm.player_count;
 var chipCount = setupForm.player_chip_count;
 var chipValue = setupForm.chip_value;
 
-var buyIn = setupForm.buy_in.value;
-var playStyle = setupForm.querySelector("input[name='play_style']:checked").value;
+var buyIn = setupForm.buy_in;
+var gamePurse = setupForm.game_purse;
+var playStyle = setupForm.querySelector("input[name='play_style']:checked");
 
 var submitBtn = setupForm.elements.submit;
 
@@ -28,32 +29,30 @@ window.addEventListener("load", function() {
     
 
     //setupForm.buy_in.value = 55.00;
-    chipCount.onchange = update;
     playerCount.onchange = update;
+    chipCount.onchange = update;
     chipValue.onchange = update;
+    playStyle.onchange = update;
     // calculate Player Buy-in
     if (chipCount > 0)
         buyIn = buyInCalc;
 
     if (playStyle === "hand_limit")
         document.forms.setup.han_count.hidden = false;
-
-    console.log(playerCount);
-    console.log(chipCount);
-    console.log(playerCount);
-    console.log(buyIn);
-    console.log(playStyle);
-
     
 });
 
 function update() {
-    chipCount = parseInt(chipCount.value)
-    console.log(typeof(chipCount));
-    chipValue = parseFloat(chipValue.value);
-    console.log(typeof(chipValue));
-    playerCount = parseInt(playerCount.value)
-    console.log(typeof(playerCount));
+    //chipCount = parseInt(chipCount.value);
+    console.log(parseInt(chipCount.value));
+    console.log(parseFloat(chipValue.value));
+    console.log(parseInt(playerCount.value));
+    var cash = parseFloat(chipCount.value) * parseFloat(chipValue.value)
+    var prize = cash * playerCount.value;
+    //console.log(cash.toLocaleString('en-US', {style: "currency", currency: "USD"}));
+    buyIn.value = cash.toFixed(2);
+    gamePurse.value = prize.toFixed(2);
+    console.log(setupForm.querySelector("input[name='play_style']:checked").value);
 }
 
 
