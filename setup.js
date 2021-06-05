@@ -18,20 +18,28 @@ var chipValue = setupForm.elements.chip_value;
 var buyIn = setupForm.elements.buy_in;
 var gamePurse = setupForm.elements.game_purse;
 var playStyle = setupForm.elements.play_style;
+//var handCount = setupForm.elements.hand_count;
 var submitBtn = setupForm.submit;
 
 
 /* Event Listeners */
 window.addEventListener("load", function() {
 
-    // updates game settings
+    // updates game settings on page
     playerCount.onchange = update;
     chipCount.onchange = update;
     chipValue.onchange = update;
     playStyle.onchange = update;
 
-    // setGame function creates creates object from form data
-    // submitBtn.onclick = getData;
+    // adds form data to sessionStorage
+    submitBtn.addEventListener("click", function() {
+        sessionStorage.setItem("playerCount", playerCount.value);
+        sessionStorage.setItem("chipCount", chipCount.value);
+        sessionStorage.setItem("buyIn", chipCount.value * chipValue.value);
+        sessionStorage.setItem("purse", chipCount.value * chipValue.value * playerCount.value);
+        sessionStorage.setItem("playStyle", playStyle.value);
+        sessionStorage.setItem("handCount", setupForm.elements.hand_count.value);
+    });
 });
 
 // displays game settings to user
@@ -41,7 +49,10 @@ function update() {
     console.log(playerCount.value);
     var playerStakes = chipCount.value * chipValue.value
     var purse = playerStakes * playerCount.value;
-    //console.log(playerStakes.toLocaleString('en-US', {style: "currency", currency: "USD"}));
+    /*
+    - may come back to this once CSS design is settled
+    console.log(playerStakes.toLocaleString('en-US', {style: "currency", currency: "USD"})); 
+    */
     buyIn.value = playerStakes.toFixed(2);
     gamePurse.value = purse.toFixed(2);
     if (playStyle.value === "hand_limit") {

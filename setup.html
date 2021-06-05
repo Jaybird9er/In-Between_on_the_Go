@@ -67,9 +67,9 @@
             <option value="12">12</option>
           </select>
           <label for="chip_count">Player Chip Count</label>
-          <input type="number" name="player_chip_count" id="chip_count" min="2" placeholder="20" required>
+          <input type="number" name="player_chip_count" id="chip_count" min="2" placeholder="20" step="1" required>
           <label for="chip_value">Chip Value</label>
-          $ <input type="text" name="chip_value" id="chip_count" placeholder="0.50" min=">0" required>
+          $ <input type="number" name="chip_value" id="chip_count" placeholder="0.50" step=".01" required>
           <label for="buy_in">Player Buy-in</label>
           $ <input type="number" name="buy_in" id="buy_in" placeholder="10.00" disabled>
           <label for="game_purse">Game Purse</label>
@@ -80,7 +80,8 @@
             <option value="consensus">Consensus End</option>
             <option value="hand_limit">Limit Hands</option>
           </select>
-          <input name="hand_count" type="number" id="hand_count" placeholder="10" value ="" min="1" hidden>
+          <input type="number" name="hand_count" id="hand_count" placeholder="10" min="1" step="1" hidden>
+          <!-- descriptions that appear when a play style is selected -->
           <p name="oneW_description" id="oneW_description">The game ends when only one person holds all the chips.</p>
           <p name="consensus_description" id="consensus_description" hidden>During the game, the group decides when to call an end to the game.</p>
           <p name="handL_description" id="handL_description" hidden>The game ends after the chosen hand limit has been reached. All winnings and losing will be listed after the game is complete.</p>

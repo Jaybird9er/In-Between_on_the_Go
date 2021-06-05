@@ -19,3 +19,21 @@ To Do:
 Author: Jamey Kirk
 Date: 05.20.2021
 */
+
+// holds initial game data
+var gameData = {
+    playerCount: parseInt(sessionStorage.getItem("playerCount")),
+    chipCount: parseInt(sessionStorage.getItem("chipCount")),
+    buyIn: parseFloat(parseFloat(sessionStorage.getItem("buyIn")).toFixed(2)),
+    purse: parseFloat(parseFloat(sessionStorage.getItem("purse")).toFixed(2)),
+    playStyle: sessionStorage.getItem("playStyle"),
+    handLimit: parseInt(sessionStorage.getItem("handCount")),
+}
+
+console.log(gameData.playerCount + 5);
+// sessionStorage.setItem("playerCount", parseInt(sessionStorage.getItem("playerCount")) + 2);
+console.log(gameData.chipCount);
+console.log(gameData.buyIn);
+console.log(gameData.purse);
+console.log(gameData.playStyle);
+console.log(gameData.handLimit);
