@@ -252,6 +252,9 @@ select {
   text-align: right;
   max-width: 100px;
 }
+#play_style {
+  max-width: 100%;
+}
 /* Removes awkward default styles on some inputs for iOS */
 input[type="email"],
 input[type="number"],

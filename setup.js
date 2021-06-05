@@ -12,23 +12,20 @@ Date: 05.20.2021
 
 /* Global Variables */
 var setupForm = document.forms.setup;
-var playerCount = setupForm.player_count;
-var chipCount = setupForm.player_chip_count;
-var chipValue = setupForm.chip_value;
+var playerCount = setupForm.elements.player_count;
+var chipCount = setupForm.elements.player_chip_count;
+var chipValue = setupForm.elements.chip_value;
 
-var buyIn = setupForm.buy_in;
-var gamePurse = setupForm.game_purse;
-var playStyle = setupForm.querySelector("input[name='play_style']:checked");
+var buyIn = setupForm.elements.buy_in;
+var gamePurse = setupForm.elements.game_purse;
+var playStyle = setupForm.elements.play_style;
 
-var submitBtn = setupForm.elements.submit;
+var submitBtn = setupForm.submit;
 
 
 /* Event Listeners */
 window.addEventListener("load", function() {
 
-    
-
-    //setupForm.buy_in.value = 55.00;
     playerCount.onchange = update;
     chipCount.onchange = update;
     chipValue.onchange = update;
@@ -36,14 +33,10 @@ window.addEventListener("load", function() {
     // calculate Player Buy-in
     if (chipCount > 0)
         buyIn = buyInCalc;
-
-    if (playStyle === "hand_limit")
-        document.forms.setup.han_count.hidden = false;
-    
+        
 });
 
 function update() {
-    //chipCount = parseInt(chipCount.value);
     console.log(parseInt(chipCount.value));
     console.log(parseFloat(chipValue.value));
     console.log(parseInt(playerCount.value));
@@ -52,16 +45,18 @@ function update() {
     //console.log(cash.toLocaleString('en-US', {style: "currency", currency: "USD"}));
     buyIn.value = cash.toFixed(2);
     gamePurse.value = prize.toFixed(2);
-    console.log(setupForm.querySelector("input[name='play_style']:checked").value);
+    // var hands = setupForm.querySelector("input[name='play_style']:checked");
+    /* This doesn't seem to be working quite right */
+    if (playStyle.value === "hand_limit") {
+        setupForm.hand_count.hidden = false;
+    }
+    else if (playStyle.value === "one_winner" || playStyle.value === "consensus") {
+        setupForm.hand_count.hidden = true;
+        setupForm.hand_count.value = "";
+
+    }
+    console.log(playStyle.value);
 }
 
-
-function buyInCalc () {
-    return chipCount * chipValue;
-}
-
-function submitBtn () {
-    
-}
 
 /* Session Storage Functions to Get and Set Data */

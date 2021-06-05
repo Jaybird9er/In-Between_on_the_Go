@@ -69,20 +69,28 @@
           <label for="chip_count">Player Chip Count</label>
           <input type="number" name="player_chip_count" id="chip_count" min="2" placeholder="20" required>
           <label for="chip_value">Chip Value</label>
-          $ <input type="text" name="chip_value" id="chip_count" placeholder="0.50" required>
+          $ <input type="text" name="chip_value" id="chip_count" placeholder="0.50" min=">0" required>
           <label for="buy_in">Player Buy-in</label>
           $ <input type="number" name="buy_in" id="buy_in" placeholder="10.00" disabled>
           <label for="game_purse">Game Purse</label>
           $ <input type="number" name="game_purse" id="game_purse" placeholder="20.00" disabled>
           <label for="play_style">Play Style</label>
           <!-- skeleton CSS calls for wrapping radio/checkboxes in label tags -->
-          <label for="one_winner"><span class="label-body">
-            <input type="radio" name="play_style" id="one_winner" value="one_winner" checked> Winner Takes All</span></label>
+          <!-- <label for="one_winner"><span class="label-body">
+            <input type="radio" name="play_style" id="one_winner" value="one_winner" required> Winner Takes All</span></label>
           <label for="consensus"><span class="label-body">
             <input type="radio" name="play_style" id="consensus" value="consensus"> Consensus End</span></label>
           <label for="hand_limit"><span class="label-body">
             <input type="radio" name="play_style" id="hand_limit" value="hand_limit"> Limit Hands</span></label>
-          <input name="hand_count" type="number" id="hand_count" placeholder="10" hidden>
+            <input name="hand_count" type="number" id="hand_count" placeholder="10" hidden>
+            <br id="break" hidden> -->
+            <select name="play_style" id="play_style"> 
+              <option value="one_winner">Winner Takes All</option>
+              <option value="consensus">Consensus End</option>
+              <option value="hand_limit">Limit Hands</option>
+            </select>
+            <input name="hand_count" type="number" id="hand_count" placeholder="10" value ="" hidden>
+          <br>
           <input type="reset">
           <input type="submit" id="submit" class="button-primary" value="Submit">
         </form>
@@ -90,7 +98,7 @@
     </div>
     <footer>
       <!-- Required for icon attribution -->
-      <div class="twelve columns">Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+      <div class="twelve columns" style="margin-bottom: 10%">Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     </footer>
   </div>
 
