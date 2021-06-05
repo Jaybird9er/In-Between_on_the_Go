@@ -31,15 +31,15 @@ window.addEventListener("load", function() {
     playStyle.onchange = update;
 
     // setGame function creates creates object from form data
-        
+    // submitBtn.onclick = getData;
 });
 
 // displays game settings to user
 function update() {
-    console.log(parseInt(chipCount.value));
-    console.log(parseFloat(chipValue.value));
-    console.log(parseInt(playerCount.value));
-    var playerStakes = parseFloat(chipCount.value) * parseFloat(chipValue.value)
+    console.log(chipCount.value);
+    console.log(chipValue.value);
+    console.log(playerCount.value);
+    var playerStakes = chipCount.value * chipValue.value
     var purse = playerStakes * playerCount.value;
     //console.log(playerStakes.toLocaleString('en-US', {style: "currency", currency: "USD"}));
     buyIn.value = playerStakes.toFixed(2);
@@ -70,5 +70,21 @@ function update() {
     console.log(playStyle.value);
 }
 
-
 /* game form data object */
+// function getData() {
+//     var gameData = {
+//         gdPlayerCount: playerCount.value,
+//         gdChipCount: chipCount.value,
+//         gdBuyIn: chipCount.value * chipValue.value,
+//         gdPurse: chipCount.value * chipValue.value * playerCount.value
+//     };
+// } 
+    
+/* 
+ - Probably best to use a constructor for the player objects and an object 
+ literal for the game data.  
+ - Or, use an object literal for the game data that then is carried over to 
+ the game page where the constructor instantiates the players.
+ - Will likely need another object to track chips/cash and another to track 
+ hands per deal. 
+*/
