@@ -69,11 +69,15 @@
           <label for="chip_count">Player Chip Count</label>
           <input type="number" name="player_chip_count" id="chip_count" min="2" placeholder="20" step="1" required>
           <label for="chip_value">Chip Value</label>
-          $ <input type="number" name="chip_value" id="chip_count" placeholder="0.50" step=".01" required>
+          $ <input type="number" name="chip_value" id="chip_count" min="0" placeholder="0.50" step=".01" required>
           <label for="buy_in">Player Buy-in</label>
           $ <input type="number" name="buy_in" id="buy_in" placeholder="10.00" disabled>
           <label for="game_purse">Game Purse</label>
           $ <input type="number" name="game_purse" id="game_purse" placeholder="20.00" disabled>
+          <!-- addition 
+             - add deal styles: classic (shuffle after every player's hand); party (shuffle after everyone's bet) 
+             - chosen deal styles will be on different pages with separate scripts 
+          -->
           <label for="play_style">Play Style</label>
           <select name="play_style" id="play_style"> 
             <option value="one_winner">Winner Takes All</option>
@@ -82,9 +86,9 @@
           </select>
           <input type="number" name="hand_count" id="hand_count" placeholder="10" min="1" step="1" hidden>
           <!-- descriptions that appear when a play style is selected -->
-          <p name="oneW_description" id="oneW_description">The game ends when only one person holds all the chips.</p>
-          <p name="consensus_description" id="consensus_description" hidden>During the game, the group decides when to call an end to the game.</p>
-          <p name="handL_description" id="handL_description" hidden>The game ends after the chosen hand limit has been reached. All winnings and losing will be listed after the game is complete.</p>
+          <p name="oneW_description" id="oneW_description">The last player with chips wins the purse.</p>
+          <p name="consensus_description" id="consensus_description" hidden>During the game, the group decides when to call an end to the game. All winnings and losing will be listed after the game is complete.</p>
+          <p name="handL_description" id="handL_description" hidden>The game ends after the chosen hand limit has been reached, or if only one player has chips. All winnings and losing will be listed after the game is complete.</p>
           <input type="reset">
           <input type="submit" id="submit" class="button-primary" value="Submit">
         </form>

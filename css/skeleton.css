@@ -339,7 +339,7 @@ pre > code {
 th,
 td {
   padding: 12px 15px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #E1E1E1; }
 th:first-child,
 td:first-child {
@@ -348,6 +348,11 @@ th:last-child,
 td:last-child {
   padding-right: 0; }
 
+/* project adjustments */
+table {
+  width: 100%;
+  text-align: center;
+}
 
 /* Spacing
 –––––––––––––––––––––––––––––––––––––––––––––––––– */

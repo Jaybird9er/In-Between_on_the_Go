@@ -35,6 +35,7 @@ window.addEventListener("load", function() {
     submitBtn.addEventListener("click", function() {
         sessionStorage.setItem("playerCount", playerCount.value);
         sessionStorage.setItem("chipCount", chipCount.value);
+        sessionStorage.setItem("chipValue", chipValue.value);
         sessionStorage.setItem("buyIn", chipCount.value * chipValue.value);
         sessionStorage.setItem("purse", chipCount.value * chipValue.value * playerCount.value);
         sessionStorage.setItem("playStyle", playStyle.value);
