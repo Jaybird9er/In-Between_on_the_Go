@@ -22,9 +22,8 @@ Date: 05.20.2021
 
 /* Global Variables */
 var playersTable = document.getElementById("table");
-var test = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
-// Player 1</td><td>17</td><td>$8.84</td></tr><tr><td>\
-// Player 2</td><td>17</td><td>$8.84</td></tr></tbody>"
+var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
+var playerArr = [[]]; 
 
 /* Objects and Constructors */
 
@@ -38,31 +37,30 @@ var gameData = {
     playStyle: sessionStorage.getItem("playStyle"),
     handLimit: parseInt(sessionStorage.getItem("handCount"))
 }
+/* 
+-- May not need player objects. Thinking arrays will work better.
 
 // player constructor
-function PlayerObj(number, chips, cash) {
+function PlayerObj(chips, cash) {
     // properties for setting initial positions
-    this.number = number;
     this.chips = chips;
     this.cash = cash;
-
-    // setter and getter methods
-    // - chips
-    this.setChips = function(result) {
-        this.chips += result;
-    }
-    this.getChips = function() {
-        return this.chips;
-    }
-    // - cash (after buy-in)
-    this.setCash = function(cValue) {
-        this.cash = parseFloat((cValue * this.chips)).toFixed(2);
-    }
-    this.getCash = function() {
-        return this.cash;
-    }
 }
-
+// setter and getter methods
+// - chips
+PlayerObj.prototype.setChips = function(result) {
+    this.chips += result;
+}
+PlayerObj.prototype.getChips = function() {
+    return this.chips;
+}
+// - cash (after buy-in)
+PlayerObj.prototype.setCash = function(cValue) {
+    this.cash = parseFloat((cValue * this.chips)).toFixed(2);
+}
+PlayerObj.prototype.getCash = function() {
+    return this.cash;
+}
 
 var player1 = new PlayerObj(1, gameData.chipCount, gameData.buyIn);
 
@@ -72,28 +70,47 @@ player1.setChips(-4);
 console.log(player1.chips);
 player1.setCash(sessionStorage.chipValue);
 console.log(parseFloat(player1.cash));
-
+ */
 window.addEventListener("load", function() {
     // create and update table
+    addPlayers();
+    playerArr[0][0] -= 4;
     setTable();
+    console.log(playerArr[0][0]);
 });
 
 /* Functions */
 
 // 
 function setTable() {
-    for (var i = 1; i <= gameData.playerCount; i++) {
-        if (i === gameData.playerCount -1) {
-            test += "<tr><td>Player " + i + "</td><td>" + gameData.chipCount + "</td><td>" 
-            + gameData.buyIn.toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+    for (var i = 0; i < gameData.playerCount; i++) {
+        if (i === gameData.playerCount - 1) {
+            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
+            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
         }
         else{
-            test += "<tr><td>Player " + i + "</td><td>" + gameData.chipCount + "</td><td>" 
-            + gameData.buyIn.toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
+            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
+            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
         }
-        playersTable.innerHTML = test;
+        playersTable.innerHTML = tableStr;
     }
 }
+
+function addPlayers() {
+    for (var i = 0; i < gameData.playerCount; i++) {
+        playerArr[i] = [gameData.chipCount];
+    }
+}
+
+/* 
+creates player objects
+
+function addPlayers() {
+    for (var i = 0; i < gameData.playerCount; i++) {
+        window["player" + i] = new PlayerObj(sessionStorage.chipCount, sessionStorage.buyIn);
+    }
+    console.log(player2);
+} */
 /* 
 Notes:
  - need to create one function that runs unless conditions are met
