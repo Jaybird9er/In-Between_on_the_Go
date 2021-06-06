@@ -435,3 +435,25 @@ there.
 
 /* Larger than Desktop HD */
 @media (min-width: 1200px) {}
+
+.betBtn, .allInBtn, .potBtn {
+  margin-bottom: 0px;
+}
+.betCell, .allInCell, .potCell {
+  padding: 3px;
+}
+.betCell {
+  width: 1%;
+}
+.betBtn, .allInBtn, .potBtn {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.allInBtn, .potBtn {
+  width: 100%;
+}
+.gameTables {
+  height: fit-content;
+  margin-bottom: 0px; 
+}

@@ -21,7 +21,9 @@ Date: 05.20.2021
 */
 
 /* Global Variables */
-var playersTable = document.getElementById("table");
+var potTable = document.getElementById("pot_table");
+var gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></thead><tbody>";
+var playersTable = document.getElementById("player_table");
 var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
 var playerArr = [[]]; 
 
@@ -37,6 +39,47 @@ var gameData = {
     playStyle: sessionStorage.getItem("playStyle"),
     handLimit: parseInt(sessionStorage.getItem("handCount"))
 }
+
+/* Main Program */
+window.addEventListener("load", function() {
+    // create and update table
+    addPlayers();
+    playerArr[0][0] -= 4;
+    setPot();
+    setTable();
+});
+
+/* Functions */
+
+// maintains current pot and hand counts
+function setPot() {
+    gameStr += "<tr><td>Hand " + gameData.handLimit + "</td><td>" + 0 + "</td><td>" 
+    + (playerArr[0][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+    potTable.innerHTML = gameStr;
+    potTable.firstElementChild.classList.add("gameTables");
+}
+
+// maintains dealer order, and chip and cash counts 
+function setTable() {
+    for (var i = 0; i < gameData.playerCount; i++) {
+        if (i === gameData.playerCount - 1) {
+            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
+            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+        }
+        else{
+            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
+            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
+        }
+        playersTable.innerHTML = tableStr;
+    }
+}
+
+function addPlayers() {
+    for (var i = 0; i < gameData.playerCount; i++) {
+        playerArr[i] = [gameData.chipCount];
+    }
+}
+
 /* 
 -- May not need player objects. Thinking arrays will work better.
 
@@ -70,37 +113,7 @@ player1.setChips(-4);
 console.log(player1.chips);
 player1.setCash(sessionStorage.chipValue);
 console.log(parseFloat(player1.cash));
- */
-window.addEventListener("load", function() {
-    // create and update table
-    addPlayers();
-    playerArr[0][0] -= 4;
-    setTable();
-    console.log(playerArr[0][0]);
-});
-
-/* Functions */
-
-// 
-function setTable() {
-    for (var i = 0; i < gameData.playerCount; i++) {
-        if (i === gameData.playerCount - 1) {
-            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
-            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
-        }
-        else{
-            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
-            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
-        }
-        playersTable.innerHTML = tableStr;
-    }
-}
-
-function addPlayers() {
-    for (var i = 0; i < gameData.playerCount; i++) {
-        playerArr[i] = [gameData.chipCount];
-    }
-}
+*/
 
 /* 
 creates player objects

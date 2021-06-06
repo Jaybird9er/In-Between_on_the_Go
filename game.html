@@ -48,9 +48,25 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
     <div class="row">
-      <div class="twelve columns" style="margin-top: 5%" id="table">
-        
+      <div class="twelve columns" style="margin-top: 5%"></div>
+      <div class="twelve columns" id="bet_table">
+        <table class="gameTables">
+          <tbody>
+            <tr>
+              <td class="betCell"><button class="button-primary betBtn" name="plus1" id="plus1">+1</button></td>
+              <td class="betCell"><button class="button-primary betBtn" name="plus5" id="plus5">+5</button></td>
+              <td class="potCell"><button class="button-primary potBtn" name="pot" id="pot">Pot</button></td>
+            </tr>
+            <tr>
+              <td class="betCell"><button class="button betBtn" name="plus1" id="plus1">-1</button></td>
+              <td class="betCell"><button class="button betBtn" name="plus5" id="plus5">-5</button></td>
+              <td class="allInCell"><button class="button-primary allInBtn" name="pot" id="pot">All-in!!!</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <div class="twelve columns" id="pot_table"></div>
+      <div class="twelve columns" id="player_table"></div>
     </div>
     <footer>
       <!-- Required for icon attribution -->
