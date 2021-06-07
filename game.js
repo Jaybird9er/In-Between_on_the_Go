@@ -25,11 +25,11 @@ var potTable = document.getElementById("pot_table");
 var gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></thead><tbody>";
 var playersTable = document.getElementById("player_table");
 var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
-var playerArr = [[]]; 
+var playerArr = []; 
 
 /* Objects and Constructors */
 
-// holds initial game data
+// holds game data from setup
 var gameData = {
     playerCount: parseInt(sessionStorage.getItem("playerCount")),
     chipCount: parseInt(sessionStorage.getItem("chipCount")),
@@ -44,12 +44,23 @@ var gameData = {
 window.addEventListener("load", function() {
     // create and update table
     addPlayers();
-    playerArr[0][0] -= 4;
+    playerArr[1][0] -= 4;
     setPot();
     setTable();
+    labelTable();
+    // check endgame conditions
+    endGame();
+    
 });
 
 /* Functions */
+
+// sets player table with initial chip/cash counts
+function addPlayers() {
+    for (var i = 0; i < gameData.playerCount; i++) {
+        playerArr[i] = [gameData.chipCount];
+    }
+}
 
 // maintains current pot and hand counts
 function setPot() {
@@ -71,12 +82,29 @@ function setTable() {
             + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
         }
         playersTable.innerHTML = tableStr;
+        //playersTable.
+        // var setChipClass = playersTable.querySelector("table tbody");
+        // for (var i = 0; i < gameData.playerCount; i++) {
+        //     setChipClass.childNodes[0].childNodes[1].classList.add("chip_count");
+        // }
     }
 }
 
-function addPlayers() {
+function labelTable() {
+    var setChipClass = playersTable.querySelector("table tbody");
     for (var i = 0; i < gameData.playerCount; i++) {
-        playerArr[i] = [gameData.chipCount];
+        setChipClass.childNodes[i].childNodes[1].classList.add("chip_count");
+    }
+}
+
+function endGame() {
+    if (gameData.playStyle === "one_winner") {
+        // var getTable = document.querySelector("#player_table table tbody");
+        // console.log(getTable.childNodes[0].childNodes[1].textContent);
+        // var getTable = playersTable.querySelector("table tbody");
+        // getTable.childNodes[0].childNodes[1].classList.add("chip_count");
+        console.log(playersTable);
+
     }
 }
 
