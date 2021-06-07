@@ -82,14 +82,10 @@ function setTable() {
             + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
         }
         playersTable.innerHTML = tableStr;
-        //playersTable.
-        // var setChipClass = playersTable.querySelector("table tbody");
-        // for (var i = 0; i < gameData.playerCount; i++) {
-        //     setChipClass.childNodes[0].childNodes[1].classList.add("chip_count");
-        // }
     }
 }
 
+// sets classes/id/etc... for table elements
 function labelTable() {
     var setChipClass = playersTable.querySelector("table tbody");
     for (var i = 0; i < gameData.playerCount; i++) {
@@ -97,14 +93,14 @@ function labelTable() {
     }
 }
 
+// determine if end game state is reached
 function endGame() {
     if (gameData.playStyle === "one_winner") {
-        // var getTable = document.querySelector("#player_table table tbody");
-        // console.log(getTable.childNodes[0].childNodes[1].textContent);
-        // var getTable = playersTable.querySelector("table tbody");
-        // getTable.childNodes[0].childNodes[1].classList.add("chip_count");
+        var inPlayers = gameData.playerCount;
+        for (var i = 0; i < gameData.playerCount; i++) {
+            if
+        }
         console.log(playersTable);
-
     }
 }
 
