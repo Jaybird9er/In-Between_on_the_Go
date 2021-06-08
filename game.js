@@ -40,15 +40,31 @@ var gameData = {
     handLimit: parseInt(sessionStorage.getItem("handCount"))
 }
 
+/* 
+ - used this to check that the "limit hands" endgame condition works
+ - need to add a function to track this and count up for each hand
+ - will make it possible to call buttons for consenus games to continue/end games
+ */
+//gameData.handLimit = 0;
+
 /* Main Program */
 window.addEventListener("load", function() {
     // create and update table
     addPlayers();
-    playerArr[1][0] -= 4;
+    playerArr[0][0] -= 23;
+    playerArr[1][0] -= 23;
+    playerArr[2][0] -= 23;
+    playerArr[3][0] -= 23;
+    playerArr[4][0] -= 23;
+    playerArr[5][0] -= 23;
+    playerArr[6][0] -= 23;
+    //playerArr[7][0] -= 23;
+    //playerArr[8][0] -= 23;
     setPot();
     setTable();
     labelTable();
     // check endgame conditions
+    
     endGame();
     
 });
@@ -64,7 +80,8 @@ function addPlayers() {
 
 // maintains current pot and hand counts
 function setPot() {
-    gameStr += "<tr><td>Hand " + gameData.handLimit + "</td><td>" + 0 + "</td><td>" 
+    var trackHands = 0;
+    gameStr += "<tr><td>Hand " + gameData.playStyle === "hand_limit" ? gameData.handLimit : trackHands + "</td><td>" + 0 + "</td><td>" 
     + (playerArr[0][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
     potTable.innerHTML = gameStr;
     potTable.firstElementChild.classList.add("gameTables");
@@ -95,12 +112,21 @@ function labelTable() {
 
 // determine if end game state is reached
 function endGame() {
+    // determine if only one player has chips
     if (gameData.playStyle === "one_winner") {
-        var inPlayers = gameData.playerCount;
+        var outPlayers = document.getElementsByClassName("chip_count");
+        var countOut= gameData.playerCount;
         for (var i = 0; i < gameData.playerCount; i++) {
-            if
+            if (parseInt(outPlayers[i].textContent) < 1) {
+                countOut--;
+            }
         }
-        console.log(playersTable);
+        if (countOut === 1) {
+            window.location = "endgame.html"
+        }
+    }
+    if (gameData.playStyle === "hand_limit" && gameData.handLimit === 0) {
+        window.location = "endgame.html"
     }
 }
 
