@@ -457,3 +457,16 @@ there.
   height: fit-content;
   margin-bottom: 0px; 
 }
+
+.player {
+  background-color: rgba(136, 136, 136, 0.5);
+}
+
+.dealer {
+  background-color: rgb(136, 136, 136, 1);
+}
+
+.self_deal {
+  background-color: #333;
+  color: #FFF;
+}

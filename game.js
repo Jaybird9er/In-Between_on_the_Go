@@ -26,8 +26,9 @@ var gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></th
 var playersTable = document.getElementById("player_table");
 var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
 var playerArr = []; 
-var setPlayer = 0;
-var handsPlayed = 0;
+var setDealer = 0;
+var setPlayer = 18;
+var handsPlayed = 1;
 
 /* Objects and Constructors */
 
@@ -64,13 +65,10 @@ window.addEventListener("load", function() {
     //playerArr[8][0] -= 23;
     
     setTable();
-    labelTable();
+    
 
     // create and manage pot table
     setPot();
-
-    // check endgame conditions
-    endGame();
 
 });
 
@@ -106,15 +104,62 @@ function setTable() {
         }
         playersTable.innerHTML = tableStr;
     }
+    // add .chip_count to each player's column
+    labelTable();
+    // check endgame conditions
+    endGame();
     // determine deal order and set hand count
     player();
 }
 
-// sets classes/id/etc... for table elements
+// sets class/id/etc... for table elements
 function labelTable() {
     var setChipClass = playersTable.querySelector("table tbody");
     for (var i = 0; i < gameData.playerCount; i++) {
         setChipClass.childNodes[i].childNodes[1].classList.add("chip_count");
+    }
+}
+
+// dealer order begins with first player and is used to determine the number of hands played
+function player() {
+    setPlayer++;
+    setDealer = handsPlayed % gameData.playerCount;
+    // for now, skips players with 0 chips; will change it to offer them one buyback
+    var noChipsPlayer = true;
+    if (document.getElementsByClassName("chip_count")[setDealer % gameData.playerCount].textContent === "0") {
+        while(noChipsPlayer) {
+            setDealer++;
+            if (document.getElementsByClassName("chip_count")[setDealer % gameData.playerCount].textContent !== "0") {
+                noChipsPlayer = false;
+            }
+        }
+    }
+    noChipsPlayer = true;
+    if (document.getElementsByClassName("chip_count")[setPlayer % gameData.playerCount].textContent === "0") {
+        while(noChipsPlayer) {
+            setPlayer++;
+            if (document.getElementsByClassName("chip_count")[setPlayer % gameData.playerCount].textContent !== "0") {
+                noChipsPlayer = false;
+            }
+        }
+    }
+    // after confirming player can still has chips, set players as dealer, player, or self deal 
+    if (setPlayer % gameData.playerCount === setDealer) {
+        playersTable.querySelectorAll("tbody tr")[setDealer].firstElementChild.textContent = "Self Deal";
+        playersTable.querySelectorAll("tbody tr")[setDealer].className = "self_deal";
+        // could use a function here to trigger after player makes bet
+        setPlayer++;
+        if (gameData.playStyle === "hand_limit") {
+            handsPlayed--;
+        }
+        else {
+            handsPlayed++;
+        }
+    }
+    else {
+        playersTable.querySelectorAll("tbody tr")[setDealer].firstElementChild.textContent = "Dealer";
+        playersTable.querySelectorAll("tbody tr")[setDealer].className = "dealer";
+        playersTable.querySelectorAll("tbody tr")[setPlayer % gameData.playerCount].className = "player";
     }
 }
 
@@ -133,11 +178,11 @@ function endGame() {
             window.location = "endgame.html"
         }
     }
-    if (gameData.playStyle === "hand_limit" && gameData.handLimit === 0) {
+    else if (gameData.playStyle === "hand_limit" && gameData.handLimit === 0) {
         window.location = "endgame.html"
     }
     // if only one player remains then "winner takes all" applies
-    else if (gameData.playStyle === "hand_limit") {
+    else if (gameData.playStyle === "hand_limit" || gameData.playStyle === "consensus") {
         var outPlayers = document.getElementsByClassName("chip_count");
         var countOut= gameData.playerCount;
         for (var i = 0; i < gameData.playerCount; i++) {
@@ -149,16 +194,6 @@ function endGame() {
             window.location = "endgame.html"
         }
     }
-}
-
-// dealer order begins with first player and is used to determine the number of hands played
-function player() {
-    if (setPlayer === gameData.playerCount) {
-        setPlayer = 0;
-        handsPlayed++;
-        console.log(handsPlayed);
-    }
-    playersTable.querySelectorAll("tbody tr")[setPlayer].className = "player"
 }
 
 /* 
