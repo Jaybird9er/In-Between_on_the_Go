@@ -26,6 +26,8 @@ var gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></th
 var playersTable = document.getElementById("player_table");
 var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
 var playerArr = []; 
+var setPlayer = 0;
+var handsPlayed = 0;
 
 /* Objects and Constructors */
 
@@ -41,32 +43,35 @@ var gameData = {
 }
 
 /* 
+gameData.handLimit = 0;
  - used this to check that the "limit hands" endgame condition works
  - need to add a function to track this and count up for each hand
  - will make it possible to call buttons for consenus games to continue/end games
  */
-//gameData.handLimit = 0;
 
 /* Main Program */
 window.addEventListener("load", function() {
-    // create and update table
+    // create and manage player table
     addPlayers();
-    playerArr[0][0] -= 23;
+    //playerArr[0][0] -= 23;
     playerArr[1][0] -= 23;
     playerArr[2][0] -= 23;
     playerArr[3][0] -= 23;
     playerArr[4][0] -= 23;
     playerArr[5][0] -= 23;
-    playerArr[6][0] -= 23;
+    //playerArr[6][0] -= 23;
     //playerArr[7][0] -= 23;
     //playerArr[8][0] -= 23;
-    setPot();
+    
     setTable();
     labelTable();
+
+    // create and manage pot table
+    setPot();
+
     // check endgame conditions
-    
     endGame();
-    
+
 });
 
 /* Functions */
@@ -80,8 +85,9 @@ function addPlayers() {
 
 // maintains current pot and hand counts
 function setPot() {
-    var trackHands = 0;
-    gameStr += "<tr><td>Hand " + gameData.playStyle === "hand_limit" ? gameData.handLimit : trackHands + "</td><td>" + 0 + "</td><td>" 
+    // trackHands needs a counter element after ":"
+    var trackHands = gameData.playStyle === "hand_limit" ? gameData.handLimit:handsPlayed;
+    gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + 0 + "</td><td>" 
     + (playerArr[0][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
     potTable.innerHTML = gameStr;
     potTable.firstElementChild.classList.add("gameTables");
@@ -100,6 +106,8 @@ function setTable() {
         }
         playersTable.innerHTML = tableStr;
     }
+    // determine deal order and set hand count
+    player();
 }
 
 // sets classes/id/etc... for table elements
@@ -128,6 +136,29 @@ function endGame() {
     if (gameData.playStyle === "hand_limit" && gameData.handLimit === 0) {
         window.location = "endgame.html"
     }
+    // if only one player remains then "winner takes all" applies
+    else if (gameData.playStyle === "hand_limit") {
+        var outPlayers = document.getElementsByClassName("chip_count");
+        var countOut= gameData.playerCount;
+        for (var i = 0; i < gameData.playerCount; i++) {
+            if (parseInt(outPlayers[i].textContent) < 1) {
+                countOut--;
+            }
+        }
+        if (countOut === 1) {
+            window.location = "endgame.html"
+        }
+    }
+}
+
+// dealer order begins with first player and is used to determine the number of hands played
+function player() {
+    if (setPlayer === gameData.playerCount) {
+        setPlayer = 0;
+        handsPlayed++;
+        console.log(handsPlayed);
+    }
+    playersTable.querySelectorAll("tbody tr")[setPlayer].className = "player"
 }
 
 /* 
