@@ -22,13 +22,14 @@ Date: 05.20.2021
 
 /* Global Variables */
 var potTable = document.getElementById("pot_table");
+var pot = 0;
 var gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></thead><tbody>";
 var playersTable = document.getElementById("player_table");
 var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
 var playerArr = []; 
 var setDealer = 0;
-var setPlayer = 18;
-var handsPlayed = 1;
+var setPlayer = 0;
+var handsPlayed = 0;
 
 /* Objects and Constructors */
 
@@ -52,24 +53,25 @@ gameData.handLimit = 0;
 
 /* Main Program */
 window.addEventListener("load", function() {
-    // create and manage player table
+    // establish initial chip counts
     addPlayers();
-    //playerArr[0][0] -= 23;
-    playerArr[1][0] -= 23;
-    playerArr[2][0] -= 23;
-    playerArr[3][0] -= 23;
-    playerArr[4][0] -= 23;
-    playerArr[5][0] -= 23;
-    //playerArr[6][0] -= 23;
-    //playerArr[7][0] -= 23;
-    //playerArr[8][0] -= 23;
+    // playerArr[0] -= 23;
+    // playerArr[1] -= 23;
+    // playerArr[2] -= 23;
+    // playerArr[3] -= 23;
+    // playerArr[4] -= 23;
+    // playerArr[5] -= 23;
+    // playerArr[6] -= 23;
+    // playerArr[7] -= 23;
+    // playerArr[8] -= 23;
     
-    setTable();
-    
-
     // create and manage pot table
     setPot();
 
+    // create and manage player table
+    setTable();
+    
+    
 });
 
 /* Functions */
@@ -77,30 +79,20 @@ window.addEventListener("load", function() {
 // sets player table with initial chip/cash counts
 function addPlayers() {
     for (var i = 0; i < gameData.playerCount; i++) {
-        playerArr[i] = [gameData.chipCount];
+        playerArr[i] = gameData.chipCount;
     }
-}
-
-// maintains current pot and hand counts
-function setPot() {
-    // trackHands needs a counter element after ":"
-    var trackHands = gameData.playStyle === "hand_limit" ? gameData.handLimit:handsPlayed;
-    gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + 0 + "</td><td>" 
-    + (playerArr[0][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
-    potTable.innerHTML = gameStr;
-    potTable.firstElementChild.classList.add("gameTables");
 }
 
 // maintains dealer order, and chip and cash counts 
 function setTable() {
     for (var i = 0; i < gameData.playerCount; i++) {
         if (i === gameData.playerCount - 1) {
-            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
-            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i] + "</td><td>" 
+            + (playerArr[i] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
         }
         else{
-            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i][0] + "</td><td>" 
-            + (playerArr[i][0] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
+            tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i] + "</td><td>" 
+            + (playerArr[i] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
         }
         playersTable.innerHTML = tableStr;
     }
@@ -192,6 +184,36 @@ function endGame() {
         }
         if (countOut === 1) {
             window.location = "endgame.html"
+        }
+    }
+}
+
+// maintains current pot and hand counts
+function setPot() {
+    // automatically adds players' ante to pot
+    ante();
+    // fill pot table
+    var trackHands = gameData.playStyle === "hand_limit" ? gameData.handLimit:handsPlayed + 1;
+    gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + pot + "</td><td>" 
+    + (pot * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+    potTable.innerHTML = gameStr;
+    potTable.firstElementChild.classList.add("gameTables");
+}
+
+/* Note: 
+- without buyback-in function players may be forced out of the game by the auto ante
+- for now this is a winner take-all strategy
+- eventually this should be modified to allow buybacks when forced out by ante
+ */
+// adds each player's ante to the pot unless they don't have chips
+function ante() {
+    if (pot === 0) {
+        for (var i = 0; i < gameData.playerCount; i++) {
+            if (playerArr[i] > 0) {
+                playerArr[i] -= 1;
+                pot++;
+                console.log(playerArr[i]);
+            }
         }
     }
 }
