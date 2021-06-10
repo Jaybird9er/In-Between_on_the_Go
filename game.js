@@ -67,10 +67,8 @@ window.addEventListener("load", function() {
     
     // create and manage pot table
     setPot();
-
     // create and manage player table
     setTable();
-    
     
 });
 
@@ -147,6 +145,7 @@ function player() {
         else {
             handsPlayed++;
         }
+        
     }
     else {
         playersTable.querySelectorAll("tbody tr")[setDealer].firstElementChild.textContent = "Dealer";
@@ -204,18 +203,31 @@ function setPot() {
 - without buyback-in function players may be forced out of the game by the auto ante
 - for now this is a winner take-all strategy
 - eventually this should be modified to allow buybacks when forced out by ante
- */
+*/
 // adds each player's ante to the pot unless they don't have chips
 function ante() {
+    var setPot = 0;
     if (pot === 0) {
         for (var i = 0; i < gameData.playerCount; i++) {
             if (playerArr[i] > 0) {
                 playerArr[i] -= 1;
                 pot++;
-                console.log(playerArr[i]);
             }
         }
+        setPot = pot;
     }
+    else if (pot > 0) {
+        pot -= 8;
+        setPot = pot;
+    }
+    return setPot;
+
+    /* 
+    New Direction:
+     - Thinking I need to consolidate all functions and global variables into an object literal
+     - This may make it easier to manage player chip counts and table pot
+     - May be best to have null values in the object and set property values in the "load" function
+     */
 }
 
 /* 
