@@ -63,11 +63,11 @@ window.addEventListener("load", function() {
     // establish initial chip counts
     addPlayers();
     // playerArr[0] -= 23;
-    // playerArr[1] -= 23;
-    playerArr[2] -= 23;
-    playerArr[3] -= 23;
-    playerArr[4] -= 23;
-    playerArr[5] -= 23;
+    // // playerArr[1] -= 23;
+    // playerArr[2] -= 23;
+    // playerArr[3] -= 23;
+    // playerArr[4] -= 23;
+    // playerArr[5] -= 23;
     // playerArr[6] -= 23;
     // playerArr[7] -= 23;
     // playerArr[8] -= 23;
@@ -76,8 +76,8 @@ window.addEventListener("load", function() {
     setPot();
     // create and manage player table
     setTable();
-    console.log(playerArr[0]);
-    console.log(pot);
+    // console.log(playerArr[0]);
+    // console.log(pot);
     
 });
 
@@ -109,6 +109,8 @@ function setTable() {
     endGame();
     // determine deal order and set hand count
     player();
+
+    result();
 }
 
 // sets class/id/etc... for table elements
@@ -242,16 +244,18 @@ function reUpPot() {
 
 // after endgame is sorted, add parameter to accpet bet values when bet buttons are hit
 function setBet() {
-    var bet = Math.floor(Math.random() * (pot - 1) + 1);
+    var bet = Math.floor(Math.random() * pot + 1);
     if (bet > pot) {
         bet = 1;
     }
-    result()
+    console.log(bet);
     return bet;
 }
 
 function result() {
     var winOrLose = Math.random() < 0.5;
+    if(winOrLose)
+    playerArr[playersTable.querySelector(".player").rowIndex - 1] + setBet();
     console.log(winOrLose);
 }
 
