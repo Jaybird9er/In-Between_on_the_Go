@@ -37,6 +37,7 @@ var playerArr = [];
 //var setPlayer = 0;
 //var handsPlayed = 0;
 
+
 /* Main Program */
 window.addEventListener("load", function() {
     // establish initial chip counts
@@ -54,7 +55,6 @@ window.addEventListener("load", function() {
     // create and manage player table
     setTable();
     // console.log(playerArr[0]);
-    // console.log(pot);
     
 });
 
@@ -77,34 +77,38 @@ var gameObj = {
     dealer: 0,
     player: 0,
     hands: 0
-
 };
 
 var potObj = {
     balance: 0,
-
+    
     setPot: function() {
-        var newBalance = 0;
         if (this.balance === 0) {
             for (var i = 0; i < setupObj.playerCount; i++) {
-                if (playerArr[i] > 0) {
-                    playerArr[i] -= 1;
-                    newBalance++;
+                if (gameObj.playerArr[i] > 0) {
+                    gameObj.playerArr[i] -= 1;
+                    this.balance++;
                 }
             }
-            this.balance = newBalance;
         }
-        return this.balance;
-    },
-    
-    getPot: function() {
-        // var winOrLose = Math.random() < 0.5;
-        // if(winOrLose) {
-        //     playerArr[playersTable.querySelector(".player").rowIndex - 1] += setBet();
-        // }
         return this.balance;
     }
 };
+
+var betObj = {
+    bet: 0,
+    
+    setBet: function(newBet) {
+        /* endgame setup */
+        // var endGameBet = Math.floor(Math.random() * potObj.setPot() + 1);
+        if (newBet > potObj.setPot()) {
+            newBet = potObj.setPot();
+        }
+        this.bet = newBet;
+        return this.bet;
+    }
+};
+
 
 /* 
 setupObj.handLimit = 0;
@@ -119,17 +123,17 @@ setupObj.handLimit = 0;
 // sets player table with initial chip/cash counts
 function addPlayers() {
     for (var i = 0; i < setupObj.playerCount; i++) {
-        playerArr[i] = setupObj.chipCount;
+        gameObj.playerArr[i] = setupObj.chipCount;
     }
 }
 
 // maintains dealer order, and chip and cash counts 
 function setTable() {
     // create and manage pot table
-    setPot();
+    showPotTable();
     for (var i = 0; i < setupObj.playerCount; i++) {
-        tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i] + "</td><td>" 
-        + (playerArr[i] * setupObj.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
+        tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + gameObj.playerArr[i] + "</td><td>" 
+        + (gameObj.playerArr[i] * setupObj.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
     }
     tableStr += "</tbody>";
     playersTable.innerHTML = tableStr;
@@ -154,13 +158,13 @@ function labelTable() {
 // dealer order begins with first player and is used to determine the number of hands played
 function player() {
     gameObj.player++;
-    gameObj.dealer = gameObj.hands % setupObj.playerCount;
+    var dealer = gameObj.hands % setupObj.playerCount;
     // for now, skips players with 0 chips; will change it to offer them one buyback
     var noChipsPlayer = true;
-    if (document.getElementsByClassName("chip_count")[gameObj.dealer % setupObj.playerCount].textContent === "0") {
+    if (document.getElementsByClassName("chip_count")[dealer % setupObj.playerCount].textContent === "0") {
         while(noChipsPlayer) {
-            gameObj.dealer++;
-            if (document.getElementsByClassName("chip_count")[gameObj.dealer % setupObj.playerCount].textContent !== "0") {
+            dealer++;
+            if (document.getElementsByClassName("chip_count")[dealer % setupObj.playerCount].textContent !== "0") {
                 noChipsPlayer = false;
             }
         }
@@ -175,9 +179,9 @@ function player() {
         }
     }
     // after confirming player can still has chips, set players as dealer, player, or self deal 
-    if (gameObj.player % setupObj.playerCount === gameObj.dealer) {
-        playersTable.querySelectorAll("tbody tr")[gameObj.dealer].firstElementChild.textContent = "Self Deal";
-        playersTable.querySelectorAll("tbody tr")[gameObj.dealer].className = "self_deal";
+    if (gameObj.player % setupObj.playerCount === dealer) {
+        playersTable.querySelectorAll("tbody tr")[dealer].firstElementChild.textContent = "Self Deal";
+        playersTable.querySelectorAll("tbody tr")[dealer].className = "self_deal";
         // could use a function here to trigger after player makes bet
         gameObj.player++;
         if (setupObj.playStyle === "hand_limit") {
@@ -229,9 +233,9 @@ function endGame() {
 }
 
 // maintains current pot and hand counts
-function setPot() {
+function showPotTable() {
     // update balancePot to maintain antes and bets
-    balancePot();
+    //balancePot();
     // fill pot table
     var trackHands = setupObj.playStyle === "hand_limit" ? setupObj.handLimit:gameObj.hands + 1;
     gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + potObj.setPot() + "</td><td>" 
@@ -247,48 +251,52 @@ function setPot() {
 */
 
 // adds initial ante, processes current player's bet, and re-ups pot if it hits 0 or when handCount increases
-function balancePot() {
-    // initial ante
-    if (pot === null) {
-        reUpPot();
-    }
-    // get player's bet
-    // will need event listener for "deal" button
-    if (pot > 0) {
-        pot -= setBet();
-    }
-    if (pot === 0) {
-        reUpPot();
-    }
-}
+// function balancePot() {
+//     // initial ante
+//     if (pot === null) {
+//         reUpPot();
+//     }
+//     // get player's bet
+//     // will need event listener for "deal" button
+//     if (pot > 0) {
+//         pot -= setBet();
+//     }
+//     if (pot === 0) {
+//         reUpPot();
+//     }
+// }
 
 // adds each player's ante to the pot unless they don't have chips
-function reUpPot() {
-    for (var i = 0; i < setupObj.playerCount; i++) {
-        if (playerArr[i] > 0) {
-            playerArr[i] -= 1;
-            pot++;
-        }
-    }
-}
+// function reUpPot() {
+//     for (var i = 0; i < setupObj.playerCount; i++) {
+//         if (playerArr[i] > 0) {
+//             playerArr[i] -= 1;
+//             pot++;
+//         }
+//     }
+// }
 
 // after endgame is sorted, add parameter to accpet bet values when bet buttons are hit
-function setBet() {
-    var bet = Math.floor(Math.random() * pot + 1);
-    if (bet > pot) {
-        bet = pot;
-    }
-    //playerArr[1] += bet;
-    console.log("Bet:" + bet);
-    return bet;
-}
+// function setBet() {
+//     var bet = Math.floor(Math.random() * pot + 1);
+//     if (bet > pot) {
+//         bet = pot;
+//     }
+//     //playerArr[1] += bet;
+//     console.log("Bet:" + bet);
+//     return bet;
+// }
 
 function result() {
     var winOrLose = Math.random() < 0.5;
-    if(winOrLose) {
-        playerArr[playersTable.querySelector(".player").rowIndex - 1] += setBet();
-    }
     console.log("WoL: " + winOrLose);
+    if(winOrLose) {
+        gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] += betObj.setBet(Math.floor(Math.random() * potObj.setPot() + 1));
+    }
+    else {
+        gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] -= betObj.setBet(Math.floor(Math.random() * potObj.setPot() + 1));
+    }
+    console.log(gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1]);
 }
 
 /* 
@@ -347,12 +355,12 @@ Notes:
  - may be best to build out the deck, deal, shuffle, bet constructors first to begin making progress
 */
 
-console.log(setupObj.playerCount);
-// sessionStorage.setItem("playerCount", parseInt(sessionStorage.getItem("playerCount")) + 2);
-console.log(setupObj.chipCount);
-console.log(setupObj.chipValue);
-console.log(typeof(setupObj.chipValue));
-console.log(setupObj.buyIn.toLocaleString('en-US', {style: "currency", currency: "USD"}));
-console.log(setupObj.purse);
-console.log(setupObj.playStyle);
-console.log(setupObj.handLimit);
+// console.log(setupObj.playerCount);
+// // sessionStorage.setItem("playerCount", parseInt(sessionStorage.getItem("playerCount")) + 2);
+// console.log(setupObj.chipCount);
+// console.log(setupObj.chipValue);
+// console.log(typeof(setupObj.chipValue));
+// console.log(setupObj.buyIn.toLocaleString('en-US', {style: "currency", currency: "USD"}));
+// console.log(setupObj.purse);
+// console.log(setupObj.playStyle);
+// console.log(setupObj.handLimit);
