@@ -16,13 +16,19 @@ To Do:
 2. create game object
 3. create player consturctor
 
+    6/11
+ New Direction:
+     - Thinking I need to consolidate all functions and global variables into an object literal
+     - This may make it easier to manage player chip counts and table pot
+     - May be best to have null values in the object and set property values in the "load" function
+
 Author: Jamey Kirk
 Date: 05.20.2021
 */
 
 /* Global Variables */
 var potTable = document.getElementById("pot_table");
-var pot = 0;
+var pot = null;
 var gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></thead><tbody>";
 var playersTable = document.getElementById("player_table");
 var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
@@ -34,7 +40,7 @@ var handsPlayed = 0;
 /* Objects and Constructors */
 
 // holds game data from setup
-var gameData = {
+var setupData = {
     playerCount: parseInt(sessionStorage.getItem("playerCount")),
     chipCount: parseInt(sessionStorage.getItem("chipCount")),
     chipValue: parseFloat(parseFloat(sessionStorage.getItem("chipValue")).toFixed(2)),
@@ -44,8 +50,9 @@ var gameData = {
     handLimit: parseInt(sessionStorage.getItem("handCount"))
 }
 
+
 /* 
-gameData.handLimit = 0;
+setupData.handLimit = 0;
  - used this to check that the "limit hands" endgame condition works
  - need to add a function to track this and count up for each hand
  - will make it possible to call buttons for consenus games to continue/end games
@@ -57,10 +64,10 @@ window.addEventListener("load", function() {
     addPlayers();
     // playerArr[0] -= 23;
     // playerArr[1] -= 23;
-    // playerArr[2] -= 23;
-    // playerArr[3] -= 23;
-    // playerArr[4] -= 23;
-    // playerArr[5] -= 23;
+    playerArr[2] -= 23;
+    playerArr[3] -= 23;
+    playerArr[4] -= 23;
+    playerArr[5] -= 23;
     // playerArr[6] -= 23;
     // playerArr[7] -= 23;
     // playerArr[8] -= 23;
@@ -69,6 +76,8 @@ window.addEventListener("load", function() {
     setPot();
     // create and manage player table
     setTable();
+    console.log(playerArr[0]);
+    console.log(pot);
     
 });
 
@@ -76,21 +85,21 @@ window.addEventListener("load", function() {
 
 // sets player table with initial chip/cash counts
 function addPlayers() {
-    for (var i = 0; i < gameData.playerCount; i++) {
-        playerArr[i] = gameData.chipCount;
+    for (var i = 0; i < setupData.playerCount; i++) {
+        playerArr[i] = setupData.chipCount;
     }
 }
 
 // maintains dealer order, and chip and cash counts 
 function setTable() {
-    for (var i = 0; i < gameData.playerCount; i++) {
-        if (i === gameData.playerCount - 1) {
+    for (var i = 0; i < setupData.playerCount; i++) {
+        if (i === setupData.playerCount - 1) {
             tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i] + "</td><td>" 
-            + (playerArr[i] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+            + (playerArr[i] * setupData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
         }
         else{
             tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i] + "</td><td>" 
-            + (playerArr[i] * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
+            + (playerArr[i] * setupData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
         }
         playersTable.innerHTML = tableStr;
     }
@@ -105,7 +114,7 @@ function setTable() {
 // sets class/id/etc... for table elements
 function labelTable() {
     var setChipClass = playersTable.querySelector("table tbody");
-    for (var i = 0; i < gameData.playerCount; i++) {
+    for (var i = 0; i < setupData.playerCount; i++) {
         setChipClass.childNodes[i].childNodes[1].classList.add("chip_count");
     }
 }
@@ -113,33 +122,33 @@ function labelTable() {
 // dealer order begins with first player and is used to determine the number of hands played
 function player() {
     setPlayer++;
-    setDealer = handsPlayed % gameData.playerCount;
+    setDealer = handsPlayed % setupData.playerCount;
     // for now, skips players with 0 chips; will change it to offer them one buyback
     var noChipsPlayer = true;
-    if (document.getElementsByClassName("chip_count")[setDealer % gameData.playerCount].textContent === "0") {
+    if (document.getElementsByClassName("chip_count")[setDealer % setupData.playerCount].textContent === "0") {
         while(noChipsPlayer) {
             setDealer++;
-            if (document.getElementsByClassName("chip_count")[setDealer % gameData.playerCount].textContent !== "0") {
+            if (document.getElementsByClassName("chip_count")[setDealer % setupData.playerCount].textContent !== "0") {
                 noChipsPlayer = false;
             }
         }
     }
     noChipsPlayer = true;
-    if (document.getElementsByClassName("chip_count")[setPlayer % gameData.playerCount].textContent === "0") {
+    if (document.getElementsByClassName("chip_count")[setPlayer % setupData.playerCount].textContent === "0") {
         while(noChipsPlayer) {
             setPlayer++;
-            if (document.getElementsByClassName("chip_count")[setPlayer % gameData.playerCount].textContent !== "0") {
+            if (document.getElementsByClassName("chip_count")[setPlayer % setupData.playerCount].textContent !== "0") {
                 noChipsPlayer = false;
             }
         }
     }
     // after confirming player can still has chips, set players as dealer, player, or self deal 
-    if (setPlayer % gameData.playerCount === setDealer) {
+    if (setPlayer % setupData.playerCount === setDealer) {
         playersTable.querySelectorAll("tbody tr")[setDealer].firstElementChild.textContent = "Self Deal";
         playersTable.querySelectorAll("tbody tr")[setDealer].className = "self_deal";
         // could use a function here to trigger after player makes bet
         setPlayer++;
-        if (gameData.playStyle === "hand_limit") {
+        if (setupData.playStyle === "hand_limit") {
             handsPlayed--;
         }
         else {
@@ -150,17 +159,17 @@ function player() {
     else {
         playersTable.querySelectorAll("tbody tr")[setDealer].firstElementChild.textContent = "Dealer";
         playersTable.querySelectorAll("tbody tr")[setDealer].className = "dealer";
-        playersTable.querySelectorAll("tbody tr")[setPlayer % gameData.playerCount].className = "player";
+        playersTable.querySelectorAll("tbody tr")[setPlayer % setupData.playerCount].className = "player";
     }
 }
 
 // determine if end game state is reached
 function endGame() {
     // determine if only one player has chips
-    if (gameData.playStyle === "one_winner") {
+    if (setupData.playStyle === "one_winner") {
         var outPlayers = document.getElementsByClassName("chip_count");
-        var countOut= gameData.playerCount;
-        for (var i = 0; i < gameData.playerCount; i++) {
+        var countOut= setupData.playerCount;
+        for (var i = 0; i < setupData.playerCount; i++) {
             if (parseInt(outPlayers[i].textContent) < 1) {
                 countOut--;
             }
@@ -169,14 +178,14 @@ function endGame() {
             window.location = "endgame.html"
         }
     }
-    else if (gameData.playStyle === "hand_limit" && gameData.handLimit === 0) {
+    else if (setupData.playStyle === "hand_limit" && setupData.handLimit === 0) {
         window.location = "endgame.html"
     }
     // if only one player remains then "winner takes all" applies
-    else if (gameData.playStyle === "hand_limit" || gameData.playStyle === "consensus") {
+    else if (setupData.playStyle === "hand_limit" || setupData.playStyle === "consensus") {
         var outPlayers = document.getElementsByClassName("chip_count");
-        var countOut= gameData.playerCount;
-        for (var i = 0; i < gameData.playerCount; i++) {
+        var countOut= setupData.playerCount;
+        for (var i = 0; i < setupData.playerCount; i++) {
             if (parseInt(outPlayers[i].textContent) < 1) {
                 countOut--;
             }
@@ -189,12 +198,12 @@ function endGame() {
 
 // maintains current pot and hand counts
 function setPot() {
-    // automatically adds players' ante to pot
-    ante();
+    // update balancePot to maintain antes and bets
+    balancePot();
     // fill pot table
-    var trackHands = gameData.playStyle === "hand_limit" ? gameData.handLimit:handsPlayed + 1;
+    var trackHands = setupData.playStyle === "hand_limit" ? setupData.handLimit:handsPlayed + 1;
     gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + pot + "</td><td>" 
-    + (pot * gameData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+    + (pot * setupData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
     potTable.innerHTML = gameStr;
     potTable.firstElementChild.classList.add("gameTables");
 }
@@ -204,30 +213,46 @@ function setPot() {
 - for now this is a winner take-all strategy
 - eventually this should be modified to allow buybacks when forced out by ante
 */
-// adds each player's ante to the pot unless they don't have chips
-function ante() {
-    var setPot = 0;
-    if (pot === 0) {
-        for (var i = 0; i < gameData.playerCount; i++) {
-            if (playerArr[i] > 0) {
-                playerArr[i] -= 1;
-                pot++;
-            }
-        }
-        setPot = pot;
-    }
-    else if (pot > 0) {
-        pot -= 8;
-        setPot = pot;
-    }
-    return setPot;
 
-    /* 
-    New Direction:
-     - Thinking I need to consolidate all functions and global variables into an object literal
-     - This may make it easier to manage player chip counts and table pot
-     - May be best to have null values in the object and set property values in the "load" function
-     */
+// adds initial ante, processes current player's bet, and re-ups pot if it hits 0 or when handCount increases
+function balancePot() {
+    // initial ante
+    if (pot === null) {
+        reUpPot();
+    }
+    // get player's bet
+    // will need event listener for "deal" button
+    if (pot > 0) {
+        pot -= setBet();
+    }
+    if (pot === 0) {
+        reUpPot();
+    }
+}
+
+// adds each player's ante to the pot unless they don't have chips
+function reUpPot() {
+    for (var i = 0; i < setupData.playerCount; i++) {
+        if (playerArr[i] > 0) {
+            playerArr[i] -= 1;
+            pot++;
+        }
+    }
+}
+
+// after endgame is sorted, add parameter to accpet bet values when bet buttons are hit
+function setBet() {
+    var bet = Math.floor(Math.random() * (pot - 1) + 1);
+    if (bet > pot) {
+        bet = 1;
+    }
+    result()
+    return bet;
+}
+
+function result() {
+    var winOrLose = Math.random() < 0.5;
+    console.log(winOrLose);
 }
 
 /* 
@@ -255,7 +280,7 @@ PlayerObj.prototype.getCash = function() {
     return this.cash;
 }
 
-var player1 = new PlayerObj(1, gameData.chipCount, gameData.buyIn);
+var player1 = new PlayerObj(1, setupData.chipCount, setupData.buyIn);
 
 console.log(player1.chips);
 console.log(player1.cash);
@@ -269,7 +294,7 @@ console.log(parseFloat(player1.cash));
 creates player objects
 
 function addPlayers() {
-    for (var i = 0; i < gameData.playerCount; i++) {
+    for (var i = 0; i < setupData.playerCount; i++) {
         window["player" + i] = new PlayerObj(sessionStorage.chipCount, sessionStorage.buyIn);
     }
     console.log(player2);
@@ -286,12 +311,12 @@ Notes:
  - may be best to build out the deck, deal, shuffle, bet constructors first to begin making progress
 */
 
-console.log(gameData.playerCount);
+console.log(setupData.playerCount);
 // sessionStorage.setItem("playerCount", parseInt(sessionStorage.getItem("playerCount")) + 2);
-console.log(gameData.chipCount);
-console.log(gameData.chipValue);
-console.log(typeof(gameData.chipValue));
-console.log(gameData.buyIn.toLocaleString('en-US', {style: "currency", currency: "USD"}));
-console.log(gameData.purse);
-console.log(gameData.playStyle);
-console.log(gameData.handLimit);
+console.log(setupData.chipCount);
+console.log(setupData.chipValue);
+console.log(typeof(setupData.chipValue));
+console.log(setupData.buyIn.toLocaleString('en-US', {style: "currency", currency: "USD"}));
+console.log(setupData.purse);
+console.log(setupData.playStyle);
+console.log(setupData.handLimit);
