@@ -43,7 +43,7 @@ window.addEventListener("load", function() {
     // establish initial chip counts
     addPlayers();
     // playerArr[0] -= 23;
-    // // playerArr[1] -= 23;
+    // playerArr[1] -= 23;
     // playerArr[2] -= 23;
     // playerArr[3] -= 23;
     // playerArr[4] -= 23;
@@ -80,10 +80,10 @@ var gameObj = {
 };
 
 var potObj = {
-    balance: 0,
+    balance: null,
     
     setPot: function() {
-        if (this.balance === 0) {
+        if (this.balance === null || this.balance === 0) {
             for (var i = 0; i < setupObj.playerCount; i++) {
                 if (gameObj.playerArr[i] > 0) {
                     gameObj.playerArr[i] -= 1;
@@ -91,9 +91,18 @@ var potObj = {
                 }
             }
         }
+        console.log(this.balance);
         return this.balance;
     }
 };
+
+// function PotObj(chips) {
+//     this.chips = chips;
+// }
+
+// PotObj.prototype.setPot = function(result) {
+//     this.chips += result;
+// }
 
 var betObj = {
     bet: 0,
@@ -144,7 +153,7 @@ function setTable() {
     // determine deal order and set hand count
     player();
 
-    result();
+    //result();
 }
 
 // sets class/id/etc... for table elements
@@ -178,7 +187,7 @@ function player() {
             }
         }
     }
-    // after confirming player can still has chips, set players as dealer, player, or self deal 
+    // after confirming player still has chips, set players as dealer, player, or self deal 
     if (gameObj.player % setupObj.playerCount === dealer) {
         playersTable.querySelectorAll("tbody tr")[dealer].firstElementChild.textContent = "Self Deal";
         playersTable.querySelectorAll("tbody tr")[dealer].className = "self_deal";
@@ -197,6 +206,7 @@ function player() {
         playersTable.querySelectorAll("tbody tr")[gameObj.dealer].className = "dealer";
         playersTable.querySelectorAll("tbody tr")[gameObj.player % setupObj.playerCount].className = "player";
     }
+    result();
 }
 
 // determine if end game state is reached
@@ -244,6 +254,21 @@ function showPotTable() {
     potTable.firstElementChild.classList.add("gameTables");
 }
 
+function result() {
+    var winOrLose = Math.random() < 0.5;
+    console.log("WoL: " + winOrLose);
+    var endGameBet = betObj.setBet(Math.floor(Math.random() * potObj.setPot() + 1));
+    if(winOrLose) {
+        gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] += endGameBet;
+        potObj.setPot();
+    }
+    else {
+        gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] -= endGameBet;
+        potObj.setPot();
+    }
+    console.log(gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1]);
+}
+
 /* Note: 
 - without buyback-in function players may be forced out of the game by the auto ante
 - for now this is a winner take-all strategy
@@ -287,17 +312,6 @@ function showPotTable() {
 //     return bet;
 // }
 
-function result() {
-    var winOrLose = Math.random() < 0.5;
-    console.log("WoL: " + winOrLose);
-    if(winOrLose) {
-        gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] += betObj.setBet(Math.floor(Math.random() * potObj.setPot() + 1));
-    }
-    else {
-        gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] -= betObj.setBet(Math.floor(Math.random() * potObj.setPot() + 1));
-    }
-    console.log(gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1]);
-}
 
 /* 
 -- May not need player objects. Thinking arrays will work better.
