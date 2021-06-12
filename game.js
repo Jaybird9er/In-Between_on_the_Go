@@ -37,10 +37,22 @@ var playerArr = [];
 //var setPlayer = 0;
 //var handsPlayed = 0;
 
+var addPot = new PotObj(0);
 
 /* Main Program */
 window.addEventListener("load", function() {
     // establish initial chip counts
+    if (addPot.getPot() === 0) {
+        var addChip = 0;
+        for (var i = 0; i < setupObj.playerCount; i++) {
+            if (gameObj.playerArr[i] > 0) {
+                gameObj.playerArr[i] -= 1;
+                addChip++;
+            }
+        }
+        addPot.setPot(addChip);
+    }
+    //addPot.setPot(setupObj.playerCount);
     addPlayers();
     // playerArr[0] -= 23;
     // playerArr[1] -= 23;
@@ -79,30 +91,34 @@ var gameObj = {
     hands: 0
 };
 
-var potObj = {
-    balance: null,
+// var potObj = {
+//     balance: null,
     
-    setPot: function() {
-        if (this.balance === null || this.balance === 0) {
-            for (var i = 0; i < setupObj.playerCount; i++) {
-                if (gameObj.playerArr[i] > 0) {
-                    gameObj.playerArr[i] -= 1;
-                    this.balance++;
-                }
-            }
-        }
-        console.log(this.balance);
-        return this.balance;
-    }
-};
+//     setPot: function() {
+//         if (this.balance === null || this.balance === 0) {
+//             for (var i = 0; i < setupObj.playerCount; i++) {
+//                 if (gameObj.playerArr[i] > 0) {
+//                     gameObj.playerArr[i] -= 1;
+//                     this.balance++;
+//                 }
+//             }
+//         }
+//         console.log(this.balance);
+//         return this.balance;
+//     }
+// };
 
-// function PotObj(chips) {
-//     this.chips = chips;
-// }
+function PotObj(chips) {
+    this.chips = chips;
+}
 
-// PotObj.prototype.setPot = function(result) {
-//     this.chips += result;
-// }
+PotObj.prototype.setPot = function(result) {
+    this.chips += result;
+}
+
+PotObj.prototype.getPot = function() {
+    return this.chips;
+}
 
 var betObj = {
     bet: 0,
@@ -110,8 +126,8 @@ var betObj = {
     setBet: function(newBet) {
         /* endgame setup */
         // var endGameBet = Math.floor(Math.random() * potObj.setPot() + 1);
-        if (newBet > potObj.setPot()) {
-            newBet = potObj.setPot();
+        if (newBet > addPot.getPot()) {
+            newBet = addPot.getPot();
         }
         this.bet = newBet;
         return this.bet;
@@ -248,8 +264,8 @@ function showPotTable() {
     //balancePot();
     // fill pot table
     var trackHands = setupObj.playStyle === "hand_limit" ? setupObj.handLimit:gameObj.hands + 1;
-    gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + potObj.setPot() + "</td><td>" 
-    + (potObj.setPot() * setupObj.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
+    gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + addPot.getPot() + "</td><td>" 
+    + (addPot.getPot() * setupObj.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
     potTable.innerHTML = gameStr;
     potTable.firstElementChild.classList.add("gameTables");
 }
@@ -257,14 +273,14 @@ function showPotTable() {
 function result() {
     var winOrLose = Math.random() < 0.5;
     console.log("WoL: " + winOrLose);
-    var endGameBet = betObj.setBet(Math.floor(Math.random() * potObj.setPot() + 1));
+    var endGameBet = betObj.setBet(Math.floor(Math.random() * addPot.getPot() + 1));
     if(winOrLose) {
         gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] += endGameBet;
-        potObj.setPot();
+        addPot.getPot();
     }
     else {
         gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1] -= endGameBet;
-        potObj.setPot();
+        addPot.getPot();
     }
     console.log(gameObj.playerArr[playersTable.querySelector(".player").rowIndex - 1]);
 }
