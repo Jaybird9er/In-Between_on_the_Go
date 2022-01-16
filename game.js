@@ -29,13 +29,13 @@ Date: 05.20.2021
 /* Global variables */
 let potTable = document.getElementById("pot_table");
 let pot = null;
-let gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></thead><tbody>";
 let playersTable = document.getElementById("player_table");
 let tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
 let playerArr = []; 
 let setDealer = 0;
 let setPlayer = 0;
 let handsPlayed = 0;
+let round = 0;
 
 /* Objects and Constructors */
 
@@ -94,8 +94,8 @@ function setTable() {
     for (let i = 0; i < setupData.playerCount; i++) {
         tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i] + "</td><td>" 
         + (playerArr[i] * setupData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
-        playersTable.innerHTML = tableStr;
     }
+    playersTable.innerHTML += tableStr + "</body>";
     // add .chip_count to each player's column
     labelTable();
     // check endgame conditions
@@ -194,15 +194,27 @@ function endGame() {
     }
 }
 
+function countHands(hands) {
+    if (hands > setupData.playerCount - 1) {
+        return handsPlayed = 0;
+    }
+    else {
+        return ++handsPlayed;
+    }
+}
+
+function setPot_new() {
+
+}
+
 // maintains current pot and hand counts
 function setPot() {
     // update balancePot to maintain antes and bets
     balancePot();
     // fill pot table
     let trackHands = setupData.playStyle === "hand_limit" ? setupData.handLimit:handsPlayed + 1;
-    gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + pot + "</td><td>" 
+    potTable.innerHTML = "<tr><td>" + trackHands + "</td><td>" + pot + "</td><td>" 
     + (pot * setupData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
-    potTable.innerHTML = gameStr;
     potTable.firstElementChild.classList.add("gameTables");
 }
 
