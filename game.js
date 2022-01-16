@@ -26,21 +26,21 @@ Author: Jamey Kirk
 Date: 05.20.2021
 */
 
-/* Global Variables */
-var potTable = document.getElementById("pot_table");
-var pot = null;
-var gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></thead><tbody>";
-var playersTable = document.getElementById("player_table");
-var tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
-var playerArr = []; 
-var setDealer = 0;
-var setPlayer = 0;
-var handsPlayed = 0;
+/* Global variables */
+let potTable = document.getElementById("pot_table");
+let pot = null;
+let gameStr = "<table><thead><tr><th>Hand</th><th>Pot</th><th>Cash</th></tr></thead><tbody>";
+let playersTable = document.getElementById("player_table");
+let tableStr = "<table><thead><tr><th>Player</th><th>Chips</th><th>Cash</th></tr></thead><tbody>";
+let playerArr = []; 
+let setDealer = 0;
+let setPlayer = 0;
+let handsPlayed = 0;
 
 /* Objects and Constructors */
 
 // holds game data from setup
-var setupData = {
+const setupData = {
     playerCount: parseInt(sessionStorage.getItem("playerCount")),
     chipCount: parseInt(sessionStorage.getItem("chipCount")),
     chipValue: parseFloat(parseFloat(sessionStorage.getItem("chipValue")).toFixed(2)),
@@ -84,14 +84,14 @@ window.addEventListener("load", function() {
 
 // sets player table with initial chip/cash counts
 function addPlayers() {
-    for (var i = 0; i < setupData.playerCount; i++) {
+    for (let i = 0; i < setupData.playerCount; i++) {
         playerArr[i] = setupData.chipCount;
     }
 }
 
 // maintains dealer order, and chip and cash counts 
 function setTable() {
-    for (var i = 0; i < setupData.playerCount; i++) {
+    for (let i = 0; i < setupData.playerCount; i++) {
         tableStr += "<tr><td>Player " + (i + 1) + "</td><td>" + playerArr[i] + "</td><td>" 
         + (playerArr[i] * setupData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr>";
         playersTable.innerHTML = tableStr;
@@ -108,8 +108,8 @@ function setTable() {
 
 // sets class/id/etc... for table elements
 function labelTable() {
-    var setChipClass = playersTable.querySelector("table tbody");
-    for (var i = 0; i < setupData.playerCount; i++) {
+    let setChipClass = playersTable.querySelector("table tbody");
+    for (let i = 0; i < setupData.playerCount; i++) {
         setChipClass.childNodes[i].childNodes[1].classList.add("chip_count");
     }
 }
@@ -119,7 +119,7 @@ function player() {
     setPlayer++;
     setDealer = handsPlayed % setupData.playerCount;
     // for now, skips players with 0 chips; will change it to offer them one buyback
-    var noChipsPlayer = true;
+    let noChipsPlayer = true;
     if (document.getElementsByClassName("chip_count")[setDealer % setupData.playerCount].textContent === "0") {
         while(noChipsPlayer) {
             setDealer++;
@@ -162,9 +162,9 @@ function player() {
 function endGame() {
     // determine if only one player has chips
     if (setupData.playStyle === "one_winner") {
-        var outPlayers = document.getElementsByClassName("chip_count");
-        var countOut = setupData.playerCount;
-        for (var i = 0; i < setupData.playerCount; i++) {
+        let outPlayers = document.getElementsByClassName("chip_count");
+        let countOut = setupData.playerCount;
+        for (let i = 0; i < setupData.playerCount; i++) {
             if (parseInt(outPlayers[i].textContent) < 1) {
                 countOut--;
             }
@@ -178,9 +178,9 @@ function endGame() {
     }
     // if only one player remains then "winner takes all" applies
     else if (setupData.playStyle === "hand_limit" || setupData.playStyle === "consensus") {
-        var outPlayers = document.getElementsByClassName("chip_count");
-        var countOut= setupData.playerCount;
-        for (var i = 0; i < setupData.playerCount; i++) {
+        let outPlayers = document.getElementsByClassName("chip_count");
+        let countOut= setupData.playerCount;
+        for (let i = 0; i < setupData.playerCount; i++) {
             if (parseInt(outPlayers[i].textContent) < 1) {
                 countOut--;
             }
@@ -199,7 +199,7 @@ function setPot() {
     // update balancePot to maintain antes and bets
     balancePot();
     // fill pot table
-    var trackHands = setupData.playStyle === "hand_limit" ? setupData.handLimit:handsPlayed + 1;
+    let trackHands = setupData.playStyle === "hand_limit" ? setupData.handLimit:handsPlayed + 1;
     gameStr += "<tr><td>Hand " + trackHands + "</td><td>" + pot + "</td><td>" 
     + (pot * setupData.chipValue).toLocaleString('en-US', {style: "currency", currency: "USD"}) + "</td></tr></tbody>";
     potTable.innerHTML = gameStr;
@@ -230,7 +230,7 @@ function balancePot() {
 
 // adds each player's ante to the pot unless they don't have chips
 function reUpPot() {
-    for (var i = 0; i < setupData.playerCount; i++) {
+    for (let i = 0; i < setupData.playerCount; i++) {
         if (playerArr[i] > 0) {
             playerArr[i] -= 1;
             pot++;
@@ -240,7 +240,7 @@ function reUpPot() {
 
 // after endgame is sorted, add parameter to accpet bet values when bet buttons are hit
 function setBet() {
-    var bet = Math.floor(Math.random() * pot + 1);
+    let bet = Math.floor(Math.random() * pot + 1);
     if (bet > pot) {
         bet = 1;
     }
@@ -249,7 +249,7 @@ function setBet() {
 }
 
 function result() {
-    var winOrLose = Math.random() < 0.5;
+    let winOrLose = Math.random() < 0.5;
     if(winOrLose)
     playerArr[playersTable.querySelector(".player").rowIndex - 1] + setBet();
     console.log(winOrLose);
@@ -280,7 +280,7 @@ PlayerObj.prototype.getCash = function() {
     return this.cash;
 }
 
-var player1 = new PlayerObj(1, setupData.chipCount, setupData.buyIn);
+let player1 = new PlayerObj(1, setupData.chipCount, setupData.buyIn);
 
 console.log(player1.chips);
 console.log(player1.cash);
@@ -294,7 +294,7 @@ console.log(parseFloat(player1.cash));
 creates player objects
 
 function addPlayers() {
-    for (var i = 0; i < setupData.playerCount; i++) {
+    for (let i = 0; i < setupData.playerCount; i++) {
         window["player" + i] = new PlayerObj(sessionStorage.chipCount, sessionStorage.buyIn);
     }
     console.log(player2);

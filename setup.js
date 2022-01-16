@@ -10,16 +10,16 @@ Date: 05.20.2021
 */
 
 
-/* Global Variables */
-var setupForm = document.forms.setup;
-var playerCount = setupForm.elements.player_count;
-var chipCount = setupForm.elements.player_chip_count;
-var chipValue = setupForm.elements.chip_value;
-var buyIn = setupForm.elements.buy_in;
-var gamePurse = setupForm.elements.game_purse;
-var playStyle = setupForm.elements.play_style;
-//var handCount = setupForm.elements.hand_count;
-var submitBtn = setupForm.submit;
+/* Global variables */
+let setupForm = document.forms.setup;
+let playerCount = setupForm.elements.player_count;
+let chipCount = setupForm.elements.player_chip_count;
+let chipValue = setupForm.elements.chip_value;
+let buyIn = setupForm.elements.buy_in;
+let gamePurse = setupForm.elements.game_purse;
+let playStyle = setupForm.elements.play_style;
+//let handCount = setupForm.elements.hand_count;
+let submitBtn = setupForm.submit;
 
 
 /* Event Listeners */
@@ -48,8 +48,8 @@ function update() {
     console.log(chipCount.value);
     console.log(chipValue.value);
     console.log(playerCount.value);
-    var playerStakes = chipCount.value * chipValue.value
-    var purse = playerStakes * playerCount.value;
+    let playerStakes = chipCount.value * chipValue.value
+    let purse = playerStakes * playerCount.value;
     /*
     - may come back to this once CSS design is settled
     console.log(playerStakes.toLocaleString('en-US', {style: "currency", currency: "USD"})); 
@@ -84,7 +84,7 @@ function update() {
 
 /* game form data object */
 // function getData() {
-//     var gameData = {
+//     let gameData = {
 //         gdPlayerCount: playerCount.value,
 //         gdChipCount: chipCount.value,
 //         gdBuyIn: chipCount.value * chipValue.value,
